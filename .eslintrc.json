@@ -1,3 +1,13 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "plugin:jsx-a11y/recommended"],
+  "settings": {
+    "jsx-a11y": {
+      "polymorphicPropName": "as",
+      "components": {
+        "Button": "button",
+        "Link": "a",
+        "image": "img"
+      }
+    }
+  }
 }
