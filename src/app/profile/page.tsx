@@ -4,6 +4,7 @@ import { auth } from "@/firebase";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import OnlineUsers from "../components/OnlineUsers";
 
 function Page() {
   const [user, loading, error] = useAuthState(auth);
@@ -33,6 +34,7 @@ function Page() {
           >
             Sign Out
           </Link>
+          <OnlineUsers></OnlineUsers>
         </>
       )}
     </>
