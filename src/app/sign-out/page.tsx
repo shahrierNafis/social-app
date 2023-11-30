@@ -1,7 +1,6 @@
 "use client";
 import { auth, database } from "@/firebase";
 import { ref, remove, set } from "firebase/database";
-import { redirect } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { Button } from "react-bootstrap";
@@ -14,7 +13,7 @@ function Page() {
     const userConnectedRef = ref(database, `connections/${user?.uid}`);
     remove(userConnectedRef); //set offline
     auth.signOut();
-    redirect("/sign-in");
+    router.push("/sign-in");
   }
   return (
     <>
