@@ -13,18 +13,25 @@ function OnlineUsers() {
       if (!snapshot.exists()) {
         return;
       }
-      setUsers(Object.keys(snapshot.val()));
+      // filter out the current user
+      const uIDs = Object.keys(snapshot.val()).filter(
+        (uid) => uid !== user?.uid
+      );
+      setUsers(uIDs);
     });
-  }, []);
+  }, [user]);
   return (
     <>
       <CardSlider title="Online Users" titleClass="text-green-300 text-2xl">
-        {users?.map((uid) => {
-          if (uid === user?.uid) {
-            return;
-          }
-          return <User key={uid} uid={uid} />;
-        })}
+        {users?.length === 0 ? (
+          <div className="h-32 flex items-center justify-center">
+            <span className="text-gray-400">{"No users online!"}</span>
+          </div>
+        ) : (
+          users?.map((uid) => {
+            return <User key={uid} uid={uid} />;
+          })
+        )}
       </CardSlider>
     </>
   );
