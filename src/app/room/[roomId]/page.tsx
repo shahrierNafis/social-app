@@ -1,10 +1,19 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import MessageList from "./MessageList";
-import TextInput from "./TextInput";
+import MessageList from "@/app/components/MessageList";
+import TextInput from "@/app/components/TextInput";
+import { useMessageStore } from "@/useStore";
+import { doc } from "firebase/firestore";
+import { firestore } from "@/firebase";
 
-function ChatUI() {
+function Page({ params: { roomId } }: { params: { roomId: string } }) {
   const container = useRef<HTMLDivElement>(null);
+  const [setRoom] = useMessageStore((state) => [state.setRoom]);
+
+  //set room
+  useEffect(() => {
+    setRoom(doc(firestore, `rooms/${roomId}`));
+  }, [roomId, setRoom]);
 
   // resize the container
   useEffect(() => {
@@ -28,4 +37,4 @@ function ChatUI() {
   );
 }
 
-export default ChatUI;
+export default Page;

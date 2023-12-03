@@ -29,7 +29,7 @@ function OnlineUsers() {
           </div>
         ) : (
           users?.map((uid) => {
-            return <User key={uid} uid={uid} />;
+            return <User key={uid} uid={uid} href={`/profile/${uid}`} />;
           })
         )}
       </CardSlider>

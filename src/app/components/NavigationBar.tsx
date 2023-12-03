@@ -9,30 +9,28 @@ function NavigationBar() {
   const [user, loading, error] = useAuthState(auth);
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar className="bg-body-tertiary">
         <Container>
           <Navbar.Brand href="#home">
             <BiMessage size={32} />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Link className="nav-link" href="/">
-                Home
-              </Link>
-              {user ? (
-                <>
-                  <Link className="nav-link" href="/profile">
-                    Profile
-                  </Link>
-                </>
-              ) : (
-                <Link className="nav-link" href="/sign-in">
-                  Sign in
+
+          <Nav className="me-auto">
+            <Link className="nav-link" href="/">
+              Home
+            </Link>
+            {user ? (
+              <>
+                <Link className="nav-link" href="/profile">
+                  Profile
                 </Link>
-              )}{" "}
-            </Nav>
-          </Navbar.Collapse>
+              </>
+            ) : (
+              <Link className="nav-link" href="/sign-in">
+                Sign in
+              </Link>
+            )}
+          </Nav>
         </Container>
       </Navbar>
       {loading && (

@@ -1,6 +1,6 @@
 import { useMessageStore } from "@/useStore";
 import { auth } from "@/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
@@ -27,13 +27,14 @@ function TextInput() {
     addDoc(collection(room, "messages"), {
       text: text,
       author: user?.uid,
+      timestamp: serverTimestamp(),
     });
 
     setText("");
   }
   return (
     <>
-      <div className="flex flex-row items-center h-16 rounded-xl bg-blend-darken w-full px-4">
+      <div className="flex flex-row items-center h-16 rounded-xl bg-blend-darken w-full px-4 max-w-5xl mx-auto">
         <AttachBtn />
         <div className="flex-grow ml-4">
           <div className="relative w-full">
@@ -50,10 +51,10 @@ function TextInput() {
         <div className="ml-4">
           <button
             onClick={onClick}
-            className=" flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+            className=" flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-2 py-1 flex-shrink-0"
           >
-            <span>Send</span>
-            <span className="ml-2 relative w-5 h-5 ">
+            <span className="hidden sm:inline">Send</span>
+            <span className="ml-1 relative w-5 h-5 ">
               <Image
                 src="/send.svg"
                 alt=""
