@@ -44,6 +44,13 @@ function TextInput() {
               autoComplete="off"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              maxLength={1000}
+              placeholder="Write a message..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onClick();
+                }
+              }}
             />
             <Emoji />
           </div>
