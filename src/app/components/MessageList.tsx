@@ -1,78 +1,63 @@
-import { firestore } from "@/firebase";
 import { useMessageStore } from "@/useStore";
-import {
-  QueryDocumentSnapshot,
-  collection,
-  onSnapshot,
-  query,
-  limit,
-  orderBy,
-  startAt,
-  getDocs,
-  doc,
-} from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+
+import React, { useCallback, useEffect, useRef } from "react";
+import Message from "./Message";
+import useMessages from "../hooks/useMessage";
+import { Virtuoso } from "react-virtuoso";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/firebase";
 
 function MessageList() {
-  const [room] = useMessageStore((state) => [state.room]);
-  const [messages, setMessages] = useState<QueryDocumentSnapshot[]>([]);
-  const [empty, setEmpty] = useState(false);
-  useEffect(() => {
-    if (!room) {
-      return;
-    }
-    const unsubscribe = onSnapshot(
-      query(
-        collection(room, "messages"),
+  const { messages, prependMessage, firstItemIndex, wasPrepended } =
+    useMessages();
 
-        orderBy("timestamp", "desc"),
-        limit(10)
-      ),
-      (snapshot) => {
-        setEmpty(false);
-        snapshot
-          .docChanges()
-          .reverse()
-          .forEach((change) => {
-            console.log(change.doc);
+  const [user, loading, error] = useAuthState(auth);
 
-            if (change.type === "added") {
-              setMessages((messages) => {
-                if (messages) {
-                  return [...messages, change.doc];
-                } else {
-                  return [change.doc];
-                }
-              });
-            }
-          });
+  const onFollowOutputHandler = useCallback(
+    (atBottom: boolean) => {
+      // if older messages were prepended, don't scroll
+      if (wasPrepended.current) {
+        wasPrepended.current = false;
+        return false;
       }
-    );
-
-    // check if there are any messages in the room
-    getDocs(query(collection(room, "messages"), limit(1))).then((snapshot) => {
-      if (snapshot.empty) {
-        setEmpty(true);
+      // if at the bottom or the user sent a message scroll to the bottom
+      if (
+        atBottom ||
+        messages[messages.length - 1].data().author === user?.uid
+      ) {
+        return "smooth";
+      } else {
+        // if not at the bottom, don't scroll
+        return false;
       }
-    });
-
-    return unsubscribe;
-  }, [room]);
-  useEffect(() => {
-    return () => {};
-  }, []);
+    },
+    [wasPrepended, messages, user?.uid]
+  );
 
   return (
     <>
-      {empty ? (
-        <div>No messages</div>
-      ) : messages.length > 0 ? (
-        messages.map((doc) => {
-          return <div key={doc.id}>{doc.data().text}</div>;
-        })
-      ) : (
-        <div>Loading...</div>
-      )}
+      <div className="flex-auto">
+        {firstItemIndex === 0 ? (
+          <div>No messages</div>
+        ) : firstItemIndex ? (
+          <Virtuoso
+            firstItemIndex={firstItemIndex}
+            initialTopMostItemIndex={firstItemIndex}
+            data={messages}
+            startReached={prependMessage}
+            followOutput={onFollowOutputHandler}
+            itemContent={(index, message) => {
+              let previousMessage = messages[index - firstItemIndex - 1];
+              let sameAuthor = previousMessage
+                ? previousMessage.data().author == message.data().author
+                : false;
+              return <Message message={message} sameAuthor={sameAuthor} />;
+            }}
+          />
+        ) : (
+          <div>Loading...</div>
+        )}
+      </div>
     </>
   );
 }

@@ -28,9 +28,7 @@ function Page({ params: { roomId } }: { params: { roomId: string } }) {
   return (
     <>
       <div ref={container} className="flex flex-col">
-        <div className="flex-auto">
-          <MessageList />
-        </div>
+        <MessageList />
         <TextInput />
       </div>
     </>
