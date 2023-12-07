@@ -33,7 +33,22 @@ function MessageList() {
     },
     [wasPrepended, messages, user?.uid]
   );
-
+  const Header = useCallback(() => {
+    return (
+      <>
+        {firstItemIndex! > 10 && (
+          <div
+            style={{
+              padding: "1rem",
+              textAlign: "center",
+            }}
+          >
+            Loading...
+          </div>
+        )}
+      </>
+    );
+  }, [firstItemIndex]);
   return (
     <>
       <div className="flex-auto">
@@ -53,6 +68,7 @@ function MessageList() {
                 : false;
               return <Message message={message} sameAuthor={sameAuthor} />;
             }}
+            components={{ Header }}
           />
         ) : (
           <div>Loading...</div>
