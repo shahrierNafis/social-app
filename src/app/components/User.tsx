@@ -3,6 +3,7 @@ import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Link from "next/link";
+import getUser from "../lib/getUser";
 
 function User({ uid, href }: { uid: string; href?: string }) {
   const [user, loading, error] = useAuthState(auth);
@@ -13,21 +14,7 @@ function User({ uid, href }: { uid: string; href?: string }) {
         return;
       }
       // Fetch user data with uid
-      setData(
-        await (
-          await fetch(`/profile/api/${uid}/`, {
-            // send the user info for user verification
-            body: JSON.stringify({
-              token: await user.getIdToken(),
-              uid: user.uid,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-          })
-        ).json()
-      );
+      setData(await getUser(user, uid));
     })();
   }, [user, uid]);
 
