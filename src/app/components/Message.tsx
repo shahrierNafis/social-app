@@ -31,7 +31,7 @@ function Message({
           <div className="flex relative items-center justify-center h-8 w-8 rounded-full  flex-shrink-0">
             {!sameAuthor && (
               <Image
-                className="rounded-full h-full w-full"
+                className="rounded-full h-full w-full bg-gray-700"
                 src={author?.photoURL || ""}
                 alt=""
                 fill
@@ -47,7 +47,7 @@ function Message({
           <div className="flex relative items-center justify-center h-8 w-8 rounded-full  flex-shrink-0">
             {!sameAuthor && (
               <Image
-                className="rounded-full h-full w-full"
+                className="rounded-full h-full w-full bg-gray-600 "
                 src={author?.photoURL || ""}
                 alt=""
                 fill

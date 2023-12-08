@@ -15,8 +15,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export default function useMessages() {
   const [room] = useMessageStore((state) => [state.room]);
   const [messages, setMessages] = useState<QueryDocumentSnapshot[]>([]);
-  const [firstItemIndex, setFirstItemIndex] = useState<number>();
+  const [firstItemIndex, setFirstItemIndex] = useState<number>(0);
   const wasPrepended = useRef(false);
+  const [loading, setLoading] = useState(true);
+
+  const quantity = 10;
 
   // handle initial and new messages
   useEffect(() => {
@@ -27,9 +30,10 @@ export default function useMessages() {
       query(
         collection(room, "messages"),
         orderBy("timestamp", "desc"),
-        limit(10)
+        limit(quantity)
       ),
       (snapshot) => {
+        setLoading(false);
         snapshot
           .docChanges()
           .toReversed()
@@ -50,7 +54,11 @@ export default function useMessages() {
   useEffect(() => {
     if (room) {
       getCountFromServer(collection(room, "messages")).then((snapshot) => {
-        setFirstItemIndex(snapshot.data().count);
+        if (snapshot.data().count < quantity) {
+          setFirstItemIndex(0);
+        } else {
+          setFirstItemIndex(snapshot.data().count - quantity);
+        }
       });
     }
     return () => {};
@@ -66,7 +74,7 @@ export default function useMessages() {
           collection(room, "messages"),
           orderBy("timestamp", "desc"),
           startAfter(messages[0]),
-          limit(10)
+          limit(quantity)
         )
       ).then((olderMessages) => {
         console.log("queried older messages");
@@ -88,5 +96,5 @@ export default function useMessages() {
       });
     }
   }, [room, messages, firstItemIndex]);
-  return { messages, prependMessage, firstItemIndex, wasPrepended };
+  return { messages, prependMessage, firstItemIndex, wasPrepended, loading };
 }

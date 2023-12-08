@@ -1,6 +1,6 @@
 import { useMessageStore } from "@/useStore";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import Message from "./Message";
 import useMessages from "../hooks/useMessage";
 import { Virtuoso } from "react-virtuoso";
@@ -8,10 +8,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase";
 
 function MessageList() {
-  const { messages, prependMessage, firstItemIndex, wasPrepended } =
+  const { messages, prependMessage, firstItemIndex, wasPrepended, loading } =
     useMessages();
 
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const onFollowOutputHandler = useCallback(
     (atBottom: boolean) => {
@@ -36,7 +36,7 @@ function MessageList() {
   const Header = useCallback(() => {
     return (
       <>
-        {firstItemIndex! > 10 && (
+        {firstItemIndex! !== 0 && (
           <div
             style={{
               padding: "1rem",
@@ -52,12 +52,13 @@ function MessageList() {
   return (
     <>
       <div className="flex-auto">
-        {firstItemIndex === 0 ? (
-          <div>No messages</div>
-        ) : firstItemIndex ? (
+        {loading ? (
+          <div>Loading...</div>
+        ) : messages.length ? (
           <Virtuoso
+            overscan={screen.availHeight * 10}
             firstItemIndex={firstItemIndex}
-            initialTopMostItemIndex={firstItemIndex}
+            initialTopMostItemIndex={messages.length - 1}
             data={messages}
             startReached={prependMessage}
             followOutput={onFollowOutputHandler}
@@ -66,12 +67,16 @@ function MessageList() {
               let sameAuthor = previousMessage
                 ? previousMessage.data().author == message.data().author
                 : false;
-              return <Message message={message} sameAuthor={sameAuthor} />;
+              return (
+                <>
+                  <Message message={message} sameAuthor={sameAuthor} />
+                </>
+              );
             }}
             components={{ Header }}
           />
         ) : (
-          <div>Loading...</div>
+          <div>No messages</div>
         )}
       </div>
     </>
