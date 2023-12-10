@@ -2,6 +2,9 @@
   "firestore": {
     "rules": "firestore.rules"
   },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "emulators": {
     "singleProjectMode": true,
     "firestore": {
@@ -10,6 +13,9 @@
     "ui": {
       "enabled": true,
       "port": 4000
+    },
+    "storage": {
+      "port": 9199
     }
   }
 }

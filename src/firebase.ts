@@ -2,6 +2,7 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
+import { connectStorageEmulator, getStorage } from "firebase/storage";
 
 // replace this firebase conFigvariable with your own
 const firebaseConfig = {
@@ -20,6 +21,9 @@ const firestore = getFirestore(app);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
+// Initialize Cloud Storage and get a reference to the service
+const storage = getStorage(app);
+
 function inDevelopment() {
   if (typeof window === "undefined") {
     return false;
@@ -32,6 +36,8 @@ function inDevelopment() {
 if (inDevelopment()) {
   console.log("connecting to firestore emulator");
   connectFirestoreEmulator(firestore, "127.0.0.1", 8080);
+  // Point to the Storage emulator running on localhost.
+  connectStorageEmulator(storage, "127.0.0.1", 9199);
 }
 
-export { firestore, auth, database, app };
+export { firestore, auth, database, app, storage };
