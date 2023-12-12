@@ -4,8 +4,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
-import AttachBtn from "./AttachBtn";
-import Emoji from "./Emoji";
+import AttachImgBtn from "./AttachImgBtn";
 
 function TextInput() {
   const [text, setText] = useState("");
@@ -25,6 +24,7 @@ function TextInput() {
     }
 
     addDoc(collection(room, "messages"), {
+      type: "text",
       text: text,
       author: user?.uid,
       timestamp: serverTimestamp(),
@@ -35,7 +35,7 @@ function TextInput() {
   return (
     <>
       <div className="flex flex-row items-center h-16 rounded-xl bg-blend-darken w-full px-4 max-w-5xl mx-auto">
-        <AttachBtn />
+        <AttachImgBtn />
         <div className="flex-grow ml-4">
           <div className="relative w-full">
             <input
@@ -52,7 +52,6 @@ function TextInput() {
                 }
               }}
             />
-            <Emoji />
           </div>
         </div>
         <div className="ml-4">

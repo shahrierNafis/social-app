@@ -54,9 +54,9 @@ function Page({ params }: { params: { uid: string } }) {
             />
             {visitee?.displayName}
             {online ? (
-              <span className="text-green-500">Online</span>
+              <span className="text-green-500 text-xs">.Online</span>
             ) : (
-              <span className="text-red-500">Offline</span>
+              <span className="text-red-500 text-xs">.Offline</span>
             )}
           </div>
           <div className="mx-4">

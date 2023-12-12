@@ -2,10 +2,11 @@ import { auth } from "@/firebase";
 import { User } from "firebase/auth";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 import Image from "next/image";
-import React, { cache, use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import getUser from "@/app/lib/getUser";
-import { useMessageStore } from "@/useStore";
+import TextMessage from "./TextMessage";
+import ImageMessage from "./ImageMessage";
 function Message({
   message,
   sameAuthor,
@@ -16,6 +17,7 @@ function Message({
   const [author, setAuthor] = useState<User>();
   const [user] = useAuthState(auth);
 
+  // get author data
   useEffect(() => {
     if (!user || sameAuthor) return;
 
@@ -24,43 +26,43 @@ function Message({
     return () => {};
   }, [message, sameAuthor, user]);
 
+  const ownMessage = message.data().author == user?.uid;
+
   return (
     <>
-      {user && user.uid == message.data().author ? (
-        <div className="flex items-center justify-start flex-row-reverse py-1">
-          <div className="flex relative items-center justify-center h-8 w-8 rounded-full  flex-shrink-0">
-            {!sameAuthor && (
-              <Image
-                className="rounded-full h-full w-full bg-gray-700"
-                src={author?.photoURL || ""}
-                alt=""
-                fill
-              />
-            )}
-          </div>
-          <div className="relative mr-3 text-sm bg-gray-700 py-2 px-4 shadow rounded-xl max-w-[16rem] break-words">
-            {message.data().text}
-          </div>
+      <div
+        className={`flex items-center py-1 ${
+          ownMessage ? "flex-row-reverse justify-start" : "flex-row"
+        }`}
+      >
+        <div className="flex relative items-center justify-center h-8 w-8 rounded-full  flex-shrink-0">
+          {!sameAuthor && (
+            <Image
+              className={`rounded-full h-full w-full ${
+                ownMessage ? "bg-gray-700" : "bg-gray-600"
+              }`}
+              src={author?.photoURL || ""}
+              alt=""
+              fill
+            />
+          )}
         </div>
-      ) : (
-        <div className="flex flex-row items-center  py-1">
-          <div className="flex relative items-center justify-center h-8 w-8 rounded-full  flex-shrink-0">
-            {!sameAuthor && (
-              <Image
-                className="rounded-full h-full w-full bg-gray-600 "
-                src={author?.photoURL || ""}
-                alt=""
-                fill
-              />
-            )}
-          </div>
-          <div className="relative ml-3 text-sm bg-gray-600 py-2 px-4 shadow rounded-xl max-w-[16rem] break-words">
-            {message.data().text}
-          </div>
-        </div>
-      )}
+
+        {renderSwitch(message, ownMessage)}
+      </div>
     </>
   );
 }
 
 export default Message;
+
+function renderSwitch(message: QueryDocumentSnapshot, ownMessage: boolean) {
+  switch (message.data().type) {
+    case "text":
+      return <TextMessage {...{ message, ownMessage }} />;
+    case "image":
+      return <ImageMessage {...{ message }} />;
+    default:
+      return "ERROR: Unknown message type!";
+  }
+}
