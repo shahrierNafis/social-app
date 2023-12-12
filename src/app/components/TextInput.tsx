@@ -1,4 +1,4 @@
-import { useMessageStore } from "@/useStore";
+import { useRoomStore } from "@/useStore";
 import { auth } from "@/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React, { useState } from "react";
@@ -8,7 +8,7 @@ import AttachImgBtn from "./AttachImgBtn";
 
 function TextInput() {
   const [text, setText] = useState("");
-  const [room] = useMessageStore((state) => [state.room]);
+  const [room] = useRoomStore((state) => [state.room]);
   const [user, loading, error] = useAuthState(auth);
   /**
    * Handles the click event for a button.

@@ -1,5 +1,5 @@
 import { storage } from "@/firebase";
-import { useMessageStore } from "@/useStore";
+import { useRoomStore } from "@/useStore";
 import { error } from "console";
 import { User } from "firebase/auth";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -11,7 +11,7 @@ export default function sendImage(
   user: User,
   setProgress: React.Dispatch<React.SetStateAction<number>>
 ) {
-  const room = useMessageStore.getState().room;
+  const room = useRoomStore.getState().room;
   if (!room) {
     return;
   }

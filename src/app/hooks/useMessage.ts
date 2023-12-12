@@ -1,4 +1,4 @@
-import { useMessageStore } from "@/useStore";
+import { useRoomStore } from "@/useStore";
 import {
   onSnapshot,
   query,
@@ -13,7 +13,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function useMessages() {
-  const [room] = useMessageStore((state) => [state.room]);
+  const [room] = useRoomStore((state) => [state.room]);
   const [messages, setMessages] = useState<QueryDocumentSnapshot[]>([]);
   const [firstItemIndex, setFirstItemIndex] = useState<number>(0);
   const wasPrepended = useRef(false);

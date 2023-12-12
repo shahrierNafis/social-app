@@ -1,4 +1,4 @@
-import { useMessageStore } from "@/useStore";
+import { useRoomStore } from "@/useStore";
 
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import Message from "./Message";

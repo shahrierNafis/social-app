@@ -16,7 +16,7 @@ function MessageBtn({ uid }: { uid: string }) {
       return;
     }
     const unsubscribe = onSnapshot(
-      doc(firestore, `users/${user?.uid}/connections/${uid}`),
+      doc(firestore, `users/${user?.uid}/conversations/${uid}`),
       async (snapshot) => {
         let roomID = snapshot?.data()?.roomId;
         if (roomID) {

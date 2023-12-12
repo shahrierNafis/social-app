@@ -14,7 +14,7 @@ service cloud.firestore {
     match /users/{uid}{
       allow read, write: if request.auth.uid==uid;
       
-    	match /connections/{other}{
+    	match /conversations/{other}{
           allow read, write: if request.auth.uid==uid;
     	}
     }

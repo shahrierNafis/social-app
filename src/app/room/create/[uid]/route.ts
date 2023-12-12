@@ -37,16 +37,15 @@ export async function POST(
     .firestore()
     .collection("users")
     .doc(uid)
-    .collection("connections")
+    .collection("conversations")
     .doc(req.uid)
     .set({ roomId });
   admin
     .firestore()
     .collection("users")
     .doc(req.uid)
-    .collection("connections")
+    .collection("conversations")
     .doc(uid)
     .set({ roomId });
-
   return Response.json({ roomId });
 }
