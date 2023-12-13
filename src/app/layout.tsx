@@ -12,10 +12,13 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`} data-bs-theme="dark">
+      <body
+        className={`${inter.className} h-screen flex flex-col`}
+        data-bs-theme="dark"
+      >
         <Presence />
         <NavigationBar />
-        <main>{children}</main>
+        <main className="flex-grow">{children}</main>
       </body>
     </html>
   );

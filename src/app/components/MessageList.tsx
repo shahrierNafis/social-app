@@ -51,7 +51,7 @@ function MessageList() {
   }, [firstItemIndex]);
   return (
     <>
-      <div className="flex-auto">
+      <div className="flex-grow max-w-screen-2xl mx-auto w-full shadow">
         {loading ? (
           <div>Loading...</div>
         ) : messages.length ? (

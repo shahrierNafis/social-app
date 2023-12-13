@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { DocumentReference } from "firebase/firestore";
 
-type MessageStore = {
+type RoomSore = {
   room: DocumentReference | null;
   setRoom: (room: DocumentReference | null) => void;
   roomName: string;
@@ -12,7 +12,7 @@ type MessageStore = {
   setRoomImage: (roomImage: string) => void;
 };
 
-export const useRoomStore = create<MessageStore>((set) => ({
+export const useRoomStore = create<RoomSore>((set) => ({
   room: null,
   setRoom: (room: DocumentReference | null) => set({ room }),
   roomName: "",
@@ -21,4 +21,13 @@ export const useRoomStore = create<MessageStore>((set) => ({
   setRoomNameLink: (roomNameLink: string) => set({ roomNameLink }),
   roomImage: "",
   setRoomImage: (roomImage: string) => set({ roomImage }),
+}));
+type PresenceStore = {
+  onlineUsers: string[];
+  setOnlineUsers: (OnlineUsers: string[]) => void;
+};
+
+export const usePresenceStore = create<PresenceStore>((set) => ({
+  onlineUsers: [],
+  setOnlineUsers: (onlineUsers: string[]) => set({ onlineUsers }),
 }));

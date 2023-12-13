@@ -8,11 +8,12 @@ import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { database } from "@/firebase";
 import { onValue, ref } from "firebase/database";
+import { usePresenceStore } from "@/useStore";
 function Page({ params }: { params: { uid: string } }) {
   const [loading, setLoading] = useState(true);
   const [visitee, setVisitee] = useState<User>();
   const [user] = useAuthState(auth);
-  const [online, setOnline] = useState<boolean>(false);
+  const [onlineUsers] = usePresenceStore((state) => [state.onlineUsers]);
   useEffect(() => {
     if (user) {
       (async () => {
@@ -23,21 +24,7 @@ function Page({ params }: { params: { uid: string } }) {
 
     return () => {};
   }, [params.uid, user]);
-  useEffect(() => {
-    const userConnectedRef = ref(database, `connections`);
-    onValue(userConnectedRef, (snapshot) => {
-      if (!snapshot.exists()) {
-        return;
-      }
-      // filter out the current user
-      const uIDs = Object.keys(snapshot.val());
-      if (uIDs.includes(params.uid)) {
-        setOnline(true);
-      } else {
-        setOnline(false);
-      }
-    });
-  }, [params.uid]);
+
   return (
     <>
       {loading ? (
@@ -53,7 +40,7 @@ function Page({ params }: { params: { uid: string } }) {
               height={50}
             />
             {visitee?.displayName}
-            {online ? (
+            {onlineUsers?.includes(params.uid) ? (
               <span className="text-green-500 text-xs">.Online</span>
             ) : (
               <span className="text-red-500 text-xs">.Offline</span>
