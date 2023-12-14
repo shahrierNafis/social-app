@@ -8,9 +8,6 @@ import OnlineUsers from "../components/OnlineUsers";
 
 function Page() {
   const [user, loading, error] = useAuthState(auth);
-  if (!loading && !user) {
-    redirect("/sign-in");
-  }
 
   return (
     <>
