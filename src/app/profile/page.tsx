@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import OnlineUsers from "../components/OnlineUsers";
+import SearchUsers from "../components/SearchUsers";
 
 function Page() {
   const [user, loading, error] = useAuthState(auth);
@@ -37,7 +38,8 @@ function Page() {
           >
             Sign Out
           </Link>
-          <OnlineUsers></OnlineUsers>
+          <OnlineUsers />
+          <SearchUsers />
         </>
       )}
     </>
