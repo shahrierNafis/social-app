@@ -1,6 +1,6 @@
 import User from "./User";
 import CardSlider from "./CardSlider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase";
 function SearchUsers() {
@@ -10,8 +10,17 @@ function SearchUsers() {
   const [loading, setLoading] = useState(false);
   function onclick() {
     if (quarry.trim() === "") {
-      setLoading(false);
-      setSearchResult([]);
+      setLoading(true);
+      fetch(`/profile/LIST`).then((res) =>
+        res
+          .json()
+          .then((result) => {
+            setSearchResult(result);
+          })
+          .then(() => {
+            setLoading(false);
+          })
+      );
       return;
     }
     setLoading(true);
@@ -26,6 +35,22 @@ function SearchUsers() {
         })
     );
   }
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/profile/LIST`).then((res) =>
+      res
+        .json()
+        .then((result) => {
+          setSearchResult(result);
+        })
+        .then(() => {
+          setLoading(false);
+        })
+    );
+    return () => {};
+  }, []);
+
   const title = (
     <>
       <div className="relative m-1">
