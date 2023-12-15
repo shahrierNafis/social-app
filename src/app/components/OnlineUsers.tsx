@@ -6,7 +6,7 @@ function OnlineUsers() {
 
   return (
     <>
-      <CardSlider title="Online Users" titleClass="text-green-300 text-2xl">
+      <CardSlider title={<Title />}>
         {onlineUsers?.length === 0 ? (
           <div className="h-32 flex items-center justify-center">
             <span className="text-gray-400">{"No users online!"}</span>
@@ -19,6 +19,14 @@ function OnlineUsers() {
       </CardSlider>
     </>
   );
+
+  function Title() {
+    return (
+      <>
+        <div className="text-green-300 text-2xl">Online Users</div>
+      </>
+    );
+  }
 }
 
 export default OnlineUsers;

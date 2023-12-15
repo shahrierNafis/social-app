@@ -4,11 +4,9 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 function CardSlider({
   children,
   title,
-  titleClass,
 }: {
   children: ReactNode;
-  title: string;
-  titleClass: string;
+  title?: ReactNode;
 }) {
   const slider: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const slideLeft = () => {
@@ -29,7 +27,7 @@ function CardSlider({
         onClick={slideLeft}
       />
       <div className="w-full">
-        <div className={titleClass}>{title}</div>
+        {title && title}
         <div
           ref={slider}
           id="slider"
