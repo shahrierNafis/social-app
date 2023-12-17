@@ -10,10 +10,18 @@ function Page() {
   const router = useRouter();
 
   function signOut() {
-    const userConnectedRef = ref(database, `connections/${user?.uid}`);
-    remove(userConnectedRef); //set offline
-    auth.signOut();
-    router.push("/sign-in");
+    if (user) {
+      const userConnectedRef = ref(database, `connections/${user.uid}`);
+      remove(userConnectedRef); //set offline
+
+      //delete anonymous user on sign out
+      if (user.isAnonymous) {
+        user.delete();
+      }
+
+      auth.signOut();
+      router.push("/sign-in");
+    }
   }
   return (
     <>
