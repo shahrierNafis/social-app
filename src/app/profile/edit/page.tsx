@@ -1,6 +1,5 @@
 "use client";
 import AvatarCrop from "@/app/components/AvatarCrop";
-import updateUser from "@/app/lib/updateUser";
 import uploadUserPhoto from "@/app/lib/uploadUserPhoto";
 import { auth } from "@/firebase";
 import React, { useEffect, useState } from "react";
@@ -8,9 +7,10 @@ import { Button, Form } from "react-bootstrap";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import "react-image-crop/dist/ReactCrop.css";
+import { updateProfile } from "firebase/auth";
 
 function Page() {
-  const [name, setName] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [user, loading, error] = useAuthState(auth);
 
   const [cropOn, setCropOn] = useState(false);
@@ -23,7 +23,7 @@ function Page() {
 
   useEffect(() => {
     if (user) {
-      setName(user.displayName!);
+      setDisplayName(user.displayName!);
     }
 
     return () => {};
@@ -47,12 +47,13 @@ function Page() {
     }
     // Update
     setIsUpdating(true);
-    if (imgBlob) {
-      const imgUrl = await uploadUserPhoto(imgBlob, user.uid);
-      await updateUser(user, name, imgUrl);
-    } else {
-      await updateUser(user, name);
-    }
+
+    await updateProfile(user, {
+      displayName,
+      // if imgBlob exists, upload photo and get url
+      ...(imgBlob && { photoURL: await uploadUserPhoto(imgBlob, user.uid) }),
+    });
+
     location.replace("/profile");
   }
 
@@ -64,8 +65,8 @@ function Page() {
           <Form.Control
             type="text"
             placeholder=""
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
           />
         </Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
