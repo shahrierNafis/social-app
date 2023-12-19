@@ -10,8 +10,11 @@ service firebase.storage {
         allow read: if request.auth != null
         allow write:if uid ==  request.auth.uid
       }
-      match /images/{roomID}/{image}{
-        allow read, write:if request.auth.uid in firestore.get(/databases/(default)/documents/rooms/$(roomID)).data.members
+      match /images/{image}{
+        allow write: if request.auth != null 
+                    && request.resource.size < 5 * 1024 * 1024 // 5MB
+                    && request.resource.contentType.matches('image/.*');
+          allow read: if request.auth != null         
       }
     }
   }

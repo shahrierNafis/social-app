@@ -1,12 +1,12 @@
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button, ProgressBar } from "react-bootstrap";
-import sendImage from "@/app/lib/sendImage";
+import uploadImage from "@/app/lib/uploadImage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { url } from "inspector";
 import { UploadTask } from "firebase/storage";
+import { useRoomStore } from "@/useStore";
+import imageCompression from "browser-image-compression";
 
 function AttachImgBtn() {
   const [image, setImage] = useState<File>();
@@ -15,14 +15,35 @@ function AttachImgBtn() {
   const [progress, setProgress] = useState(0);
   const [uploadTask, setUploadTask] = useState<UploadTask>();
   const [isSending, setIsSending] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [room] = useRoomStore((state) => [state.room]);
+
   async function onClick() {
     if (!isVisible || !image || !user) {
       return;
     }
     // Start upLoading
-    setUploadTask(sendImage(image, user, setProgress));
+    setUploadTask(
+      uploadImage({
+        image: await imageCompression(image, { maxSizeMB: 5 }), // 5MB
+        setProgress,
+        setImageUrl,
+      })
+    );
     setIsSending(true);
   }
+
+  // send image when upload task is done
+  useEffect(() => {
+    if (imageUrl && user && room) {
+      addDoc(collection(room, "messages"), {
+        type: "image",
+        imageUrl: imageUrl,
+        author: user.uid,
+        timestamp: serverTimestamp(),
+      });
+    }
+  }, [imageUrl, room, user]);
 
   function cancel() {
     if (uploadTask) {
@@ -36,7 +57,7 @@ function AttachImgBtn() {
 
   // hide on 100%
   useEffect(() => {
-    if (progress === 100) {
+    if (progress === 100 && imageUrl) {
       setIsVisible(false);
       setProgress(0);
       setUploadTask(undefined);
@@ -44,7 +65,7 @@ function AttachImgBtn() {
     }
 
     return () => {};
-  }, [progress]);
+  }, [progress, imageUrl]);
 
   return (
     <>
