@@ -2,13 +2,13 @@ rules_version = '2';
 
 service cloud.firestore {
 	match /databases/{database}/documents {
-		
     match /rooms/{roomID}{
-			allow read, write: if request.auth.uid in resource.data.members
+			allow read, update: if request.auth.uid in resource.data.members
+                  allow write: if request.auth.uid != null
   	 	
       match /messages/{message}{
-  			allow read,write:if request.auth.uid in get(/databases/$(database)/documents/rooms/$(roomID)).data.members
- 				allow update:if request.auth.uid == resource.data.author
+                        allow read, write:if request.auth.uid in get(/databases/$(database)/documents/rooms/$(roomID)).data.members
+ 			      allow update, delete:if request.auth.uid == resource.data.author
    		}
    }
     match /users/{uid}{

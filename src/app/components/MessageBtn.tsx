@@ -1,11 +1,10 @@
 "use client";
 import { auth } from "@/firebase";
 import { firestore } from "@/firebase";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import React, { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { Button } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
 import { Url } from "next/dist/shared/lib/router/router";
 function MessageBtn({ uid }: { uid: string }) {
@@ -22,18 +21,28 @@ function MessageBtn({ uid }: { uid: string }) {
         if (roomID) {
           setLink(`/room/${roomID}`); // set the room(roomRef);
         } else {
+          const roomId = uuidv4();
+
           // create the room
-          await fetch(`/room/create/${uid}`, {
-            // send the user info for user verification
-            body: JSON.stringify({
-              uid: user?.uid,
-              token: await user?.getIdToken(),
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "POST",
+          setDoc(doc(firestore, "rooms/" + roomId), {
+            members: [uid, user.uid],
           });
+
+          setDoc(
+            doc(firestore, `users/${user.uid}/conversations/${uid}`),
+            {
+              roomId,
+            },
+            { merge: true }
+          );
+
+          setDoc(
+            doc(firestore, `users/${uid}/conversations/${user.uid}`),
+            {
+              roomId,
+            },
+            { merge: true }
+          );
         }
       }
     );
