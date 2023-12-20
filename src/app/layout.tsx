@@ -13,7 +13,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} h-screen flex flex-col`}
+        className={`${inter.className} h-[100dvh] flex flex-col`}
         data-bs-theme="dark"
       >
         <Presence />
