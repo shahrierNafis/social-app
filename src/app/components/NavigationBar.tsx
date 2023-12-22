@@ -34,6 +34,9 @@ function NavigationBar() {
                 <Link className="nav-link" href="/profile">
                   Profile
                 </Link>
+                <Link className="nav-link" href="/submit">
+                  ➕Create
+                </Link>
               </>
             ) : (
               <Link className="nav-link" href="/sign-in">
