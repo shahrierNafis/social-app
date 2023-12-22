@@ -4,8 +4,7 @@ import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 import useConversations from "./hooks/useConversations";
 import Image from "next/image";
 import Link from "next/link";
-import { User } from "firebase/auth";
-
+import { User } from "@/app/lib/getUser";
 export default function Home() {
   const [conversations, loading] = useConversations();
 

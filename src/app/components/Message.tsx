@@ -1,10 +1,9 @@
 import { auth } from "@/firebase";
-import { User } from "firebase/auth";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import getUser from "@/app/lib/getUser";
+import getUser, { User } from "@/app/lib/getUser";
 import TextMessage from "./TextMessage";
 import ImageMessage from "./ImageMessage";
 function Message({
@@ -21,7 +20,7 @@ function Message({
   useEffect(() => {
     if (!user || sameAuthor) return;
 
-    (async () => setAuthor(await getUser(user, message.data().author)))();
+    (async () => setAuthor(await getUser(message.data().author)))();
 
     return () => {};
   }, [message, sameAuthor, user]);

@@ -1,9 +1,8 @@
 import { auth } from "@/firebase";
-import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Link from "next/link";
-import getUser from "../lib/getUser";
+import getUser, { User } from "@/app/lib/getUser";
 
 function User({ uid, href }: { uid: string; href?: string }) {
   const [user, loading, error] = useAuthState(auth);
@@ -14,7 +13,7 @@ function User({ uid, href }: { uid: string; href?: string }) {
         return;
       }
       // Fetch user data with uid
-      setData(await getUser(user, uid));
+      setData(await getUser(uid));
     })();
   }, [user, uid]);
 

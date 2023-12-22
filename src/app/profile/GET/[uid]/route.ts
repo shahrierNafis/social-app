@@ -1,29 +1,14 @@
 import admin from "@/firebaseAdmin";
 import { NextRequest } from "next/server";
 
-export async function POST(
+export async function GET(
   request: NextRequest,
   { params: { uid } }: { params: { uid: string } }
 ) {
-  const req = await request.json();
-
-  // verify that the user is authenticated
-  await admin
-    .auth()
-    .verifyIdToken(req.token)
-    .then((decodedToken) => {
-      if (req.uid != decodedToken.uid) {
-        return Response.json({ error: "invalid auth" });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
   if (!uid) {
     return Response.json({ error: "uid not provided" });
   }
   const data = await admin.auth().getUser(uid);
-
-  return Response.json({ ...data });
+  const { displayName, photoURL, uid: _uid } = data;
+  return Response.json({ displayName, photoURL, uid: _uid });
 }

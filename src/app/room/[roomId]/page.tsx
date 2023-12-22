@@ -32,7 +32,7 @@ function Page({ params: { roomId } }: { params: { roomId: string } }) {
       if (snapshot.exists()) {
         snapshot.data().members.forEach((member: string) => {
           if (member !== user?.uid) {
-            getUser(user, member).then((UserRecord) => {
+            getUser(member).then((UserRecord) => {
               setRoomName(UserRecord.displayName);
               setRoomNameLink(`/profile/${UserRecord.uid}`);
               setRoomImage(UserRecord.photoURL);

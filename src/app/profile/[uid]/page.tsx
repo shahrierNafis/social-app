@@ -2,12 +2,9 @@
 import MessageBtn from "@/app/components/MessageBtn";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { User } from "firebase/auth";
-import getUser from "@/app/lib/getUser";
+import getUser, { User } from "@/app/lib/getUser";
 import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { database } from "@/firebase";
-import { onValue, ref } from "firebase/database";
 import { usePresenceStore } from "@/useStore";
 function Page({ params }: { params: { uid: string } }) {
   const [loading, setLoading] = useState(true);
@@ -17,7 +14,7 @@ function Page({ params }: { params: { uid: string } }) {
   useEffect(() => {
     if (user) {
       (async () => {
-        setVisitee(await getUser(user, params.uid));
+        setVisitee(await getUser(params.uid));
         setLoading(false);
       })();
     }

@@ -12,8 +12,7 @@ import {
 } from "firebase/firestore";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { User } from "firebase/auth";
-import getUser from "../lib/getUser";
+import getUser, { User } from "@/app/lib/getUser";
 
 type Conversation = {
   roomId: string;
@@ -40,7 +39,7 @@ function useConversations(): [Conversation[], boolean] {
           if (change.type === "added") {
             const newConversation = {
               roomId: change.doc.data().roomId, // set roomId
-              roomMate: await getUser(user, change.doc.id), // set RoomMate
+              roomMate: await getUser(change.doc.id), // set RoomMate
               latestMessage: await getLatestMessage(change.doc.data().roomId), // set latestMessage
             } as Conversation;
             if (newConversation.latestMessage === undefined) return;
