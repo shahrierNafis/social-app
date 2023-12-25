@@ -1,48 +1,60 @@
+"use client";
 import { firestore } from "@/firebase";
 import {
-  DocumentData,
+  CollectionReference,
   DocumentReference,
   collection,
-  getDocs,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useRef } from "react";
+import AddComment from "./AddComment";
+import { Virtuoso } from "react-virtuoso";
+import useComments from "../hooks/useComments";
+import Comment from "./Comment";
 
-type Comment = {
-  text: string;
-  imageUrl?: string;
-  commenters: string[];
-};
-
-function Comments({ postRef }: { postRef: DocumentReference }) {
-  const [comments, setComments] = useState<Comment[]>([]);
-  useEffect(() => {
-    getDocs(collection(firestore, postRef.path, "comments")).then(
-      (snapshot) => {
-        setComments(
-          snapshot.docs
-            .map((doc) => doc.data() as Comment)
-            .toSorted((a, b) => b.commenters.length - a.commenters.length)
-        );
-      }
-    );
-  }, [postRef]);
-
+function Comments({
+  postRef,
+  preOpened = false,
+}: {
+  postRef: DocumentReference;
+  preOpened?: boolean;
+}) {
+  const commentsRef = useRef<CollectionReference>(
+    collection(firestore, postRef.path, "comments")
+  );
+  const { comments, loadMore, loading, hasMore, setVisibleRange } = useComments(
+    commentsRef.current
+  );
   return (
     <>
-      <div className="m-2 p-2 border shadow flex flex-wrap">
-        {comments.map((comment: DocumentData) => (
-          <div key={comment.id}>
-            <div className="border shadow inline-block m-1 p-1">
-              <span className="relative border rounded-full min-w-[3em] px-4 max-w-xs shadow-sm inline-flex justify-center hover:cursor-pointer">
-                <span className="line-clamp-3 break-all">{comment.text}</span>
-              </span>
-              <span className="">{comment.commenters.length}</span>
-            </div>
+      {commentsRef && (
+        <>
+          <div className="sm:m-2 sm:p-2 border  shadow rounded bg-inherit">
+            <h1>Comments</h1>
+            <AddComment commentsRef={commentsRef.current} {...{ preOpened }} />
+            {loading ? (
+              <div className="mx-auto">Loading...</div>
+            ) : (
+              comments.length > 0 && (
+                <>
+                  <div className={`mx-auto w-full  border rounded shadow`}>
+                    <Virtuoso
+                      useWindowScroll
+                      increaseViewportBy={window.innerHeight * 5}
+                      data={comments}
+                      itemContent={(index, comment) => {
+                        return <Comment key={comment.id} {...{ comment }} />;
+                      }}
+                      endReached={loadMore}
+                      rangeChanged={setVisibleRange}
+                    />
+                  </div>
+                </>
+              )
+            )}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </>
   );
 }
-
 export default Comments;

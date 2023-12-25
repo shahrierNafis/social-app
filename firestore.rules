@@ -20,10 +20,12 @@ service cloud.firestore {
                   }
                   match /posts/{post=**} {
                         allow read:if request.auth != null
-                        allow write: if request.auth.uid==UID;
+                        allow write: if request.auth.uid==UID
+                              || innerCommentExists()
 
                         match /comments/{comment} {
-                              allow write: if request.resource.data.author==request.auth.uid
+                              allow write: if request.resource.data.author==request.auth.uid 
+                              allow delete: if resource.data.author==request.auth.uid 
                         }
                         match /reactions/{reaction} {
                               allow write: if (request.resource.data.reactors.hasOnly([request.auth.uid])
@@ -37,4 +39,8 @@ service cloud.firestore {
                   }
             }
       }
+}
+function innerCommentExists(){
+      let commentID = request.resource.data.innerCommentsIDs.removeAll(resource.data.innerCommentsIDs)[0];
+      return exists(path(string(request.path)+"/comments/"+commentID));
 }
