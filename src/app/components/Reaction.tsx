@@ -8,14 +8,16 @@ export type ReactionTS = {
   reactors: string[];
   path: string;
 };
-export default function Reaction({
+function Reaction({
   reaction,
   index,
   setReactions,
+  size = "base",
 }: {
   reaction: ReactionTS;
   index: number;
   setReactions: React.Dispatch<React.SetStateAction<ReactionTS[]>>;
+  size?: string;
 }) {
   const [user, loading, error] = useAuthState(auth);
   async function onclick(reaction: ReactionTS, index: number) {
@@ -39,22 +41,23 @@ export default function Reaction({
   return (
     <>
       <div
-        className={`border rounded shadow inline-block m-1 p-1 ${
+        className={`text-${size} border rounded shadow inline-block m-1 p-1 ${
           userDidReact(reaction, user?.uid!) && "bg-violet-700"
         }`}
       >
         <button
-          className="border rounded-full px-1 hover:cursor-pointer bg-dark ring-black/50 lg:hover:ring active:ring"
+          className={`!text-${size} border rounded-full px-1 hover:cursor-pointer bg-dark ring-black/50 lg:hover:ring active:ring`}
           onClick={() => onclick(reaction, index)}
         >
           {reaction.emoji}
         </button>
-        <span className=""> {reaction.reactors.length}</span>
+        <span className={`text-${size}`}> {reaction.reactors.length}</span>
       </div>
     </>
   );
 }
 
+export default Reaction;
 function userDidReact(reaction: ReactionTS, user: string) {
   return reaction.reactors.includes(user);
 }

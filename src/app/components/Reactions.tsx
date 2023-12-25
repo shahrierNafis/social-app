@@ -12,7 +12,13 @@ import FlipMove from "react-flip-move";
 import Reaction, { type ReactionTS } from "./Reaction";
 import AddReaction from "./AddReaction";
 
-function Reactions({ postRef }: { postRef: DocumentReference }) {
+function Reactions({
+  postRef,
+  size = "base",
+}: {
+  postRef: DocumentReference;
+  size?: "xs" | "sm" | "base" | "lg" | "xl";
+}) {
   const [reactions, setReactions] = useState<ReactionTS[]>([]);
   const [user, loading, error] = useAuthState(auth);
 
@@ -43,20 +49,25 @@ function Reactions({ postRef }: { postRef: DocumentReference }) {
   return (
     <>
       {user && reactionsRef && (
-        <div className="m-2 p-2 border shadow flex flex-wrap">
+        <div
+          className={`${
+            !["sm", "xs"].includes(size) && "m-2 p-2"
+          } shadow inline-flex flex-wrap items-center w-100%`}
+        >
           <FlipMove>
             {reactions.map((reaction: ReactionTS, index) => (
-              <div key={reaction.id} className="inline-block">
-                <Reaction {...{ reaction, index, setReactions }} />
+              <div key={reaction.id} className={`text-${size} inline-block`}>
+                <Reaction {...{ reaction, index, setReactions, size }} />
               </div>
             ))}
           </FlipMove>
-          <AddReaction {...{ reactionsRef, user }} />
+          <AddReaction {...{ reactionsRef, user, size }} />
         </div>
       )}
     </>
   );
 }
+
 export default Reactions;
 /**
  * Sorts an array of ReactionTS objects in descending order based on the number of reactors.

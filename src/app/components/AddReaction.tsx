@@ -13,9 +13,11 @@ import { User } from "firebase/auth";
 function AddReaction({
   reactionsRef,
   user,
+  size = "base",
 }: {
   reactionsRef: CollectionReference;
   user: User;
+  size?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -30,7 +32,7 @@ function AddReaction({
   return (
     <>
       <button
-        className="inline-block border rounded shadow m-1 p-1 px-3 flex-grow-0"
+        className={`text-${size} inline-block border rounded shadow m-1 p-1 px-3 flex-grow-0`}
         onClick={() => setOpen(!open)}
       >
         ➕
