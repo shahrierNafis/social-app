@@ -15,7 +15,7 @@ function NavigationBar() {
   const isInARoom = usePathname().includes("/room/");
   return (
     <>
-      <Navbar className="bg-body-tertiary flex-shrink-0 overflow-x-scroll">
+      <Navbar className="bg-body-tertiary flex-shrink-0 overflow-x-scroll no-scrollbar">
         <Container>
           <Navbar.Brand className="hidden sm:inline-block">
             <BiMessage size={32} />

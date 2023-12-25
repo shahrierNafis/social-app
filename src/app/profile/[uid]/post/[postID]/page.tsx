@@ -2,7 +2,6 @@
 import { auth, firestore } from "@/firebase";
 import { DocumentSnapshot, deleteDoc, doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
 import Comments from "@/app/components/Comments";
 import Reactions from "@/app/components/Reactions";
