@@ -1,6 +1,7 @@
 "use client";
 import { auth, firestore } from "@/firebase";
 import {
+  Timestamp,
   addDoc,
   collection,
   doc,
@@ -15,6 +16,7 @@ import uploadImage from "../lib/uploadImage";
 import imageCompression from "browser-image-compression";
 import { ProgressBar } from "react-bootstrap";
 import { useRouter } from "next/navigation";
+import PostData from "../types/PostData";
 
 function Page() {
   const [text, setText] = useState("");
@@ -43,9 +45,10 @@ function Page() {
         addDoc(collection(firestore, `users/${user.uid}/posts`), {
           text,
           ...(imageUrl && { imageUrl }),
-          createdAt: serverTimestamp(),
+          timestamp: serverTimestamp() as Timestamp,
           author: user.uid,
-        }).then((DocumentReference) => {
+          innerCommentsIDs: [],
+        } as PostData).then((DocumentReference) => {
           // add reactions
           Promise.all(
             ["👍", "👎", "❤️", "😂", "😯", "😢", "😡"].map((emoji) => {
@@ -97,11 +100,11 @@ function Page() {
               }
             />
           </Form.Group>
+          {isSending && <ProgressBar className="w-full" now={progress} />}
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </Form>
-        {isSending && <ProgressBar className="w-full" now={progress} />}
       </div>
     </>
   );
