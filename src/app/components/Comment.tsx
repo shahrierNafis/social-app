@@ -12,6 +12,7 @@ import Image from "next/image";
 import getUser, { User } from "@/app/lib/getUser";
 import { Button } from "react-bootstrap";
 import { auth } from "@/firebase";
+import Link from "next/link";
 
 let renderCount = 0;
 
@@ -40,16 +41,18 @@ function Comment({ comment }: { comment: CommentType }) {
           {/* photo, name and timestamp */}
           {author ? (
             <>
-              {author?.photoURL && (
-                <Image
-                  className="rounded-full inline bg-zinc-900"
-                  src={author?.photoURL}
-                  alt=""
-                  width={50}
-                  height={50}
-                />
-              )}
-              {author?.displayName}
+              <Link href={`/profile/${author.uid}`}>
+                {author?.photoURL && (
+                  <Image
+                    className="rounded-full inline bg-zinc-900"
+                    src={author?.photoURL}
+                    alt=""
+                    width={50}
+                    height={50}
+                  />
+                )}
+                {author?.displayName}
+              </Link>
               {comment.data().timestamp && (
                 <span className="text-gray-400 text-xs">
                   {" "}

@@ -10,6 +10,7 @@ import getUser, { User } from "@/app/lib/getUser";
 import Button from "react-bootstrap/Button";
 import PostData from "@/app/types/PostData";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Page({
   params: { uid, postID },
@@ -33,22 +34,27 @@ function Page({
       {user && (
         <>
           <div className=" sm:m-2 sm:p-4 p-2 border shadow">
-            {user.photoURL && (
-              <Image
-                className="rounded-full inline"
-                src={user.photoURL}
-                alt=""
-                width={50}
-                height={50}
-              />
-            )}
-            {user?.displayName}
+            {/* photo, name and timestamp */}
+            <Link href={`/profile/${uid}`}>
+              {user.photoURL && (
+                <Image
+                  className="rounded-full inline"
+                  src={user.photoURL}
+                  alt=""
+                  width={50}
+                  height={50}
+                />
+              )}
+              {user?.displayName}
+            </Link>
             {post?.data()?.timestamp && (
               <span className="text-gray-400 text-xs">
                 {" "}
                 {post?.data()?.timestamp.toDate().toDateString()}
               </span>
             )}
+
+            {/* body */}
             <div className="break-words"> {post?.data()?.text}</div>
 
             {post?.data()?.imageUrl != undefined && (
@@ -65,6 +71,7 @@ function Page({
                 />
               </div>
             )}
+            {/* Reactions, comment button, remove button */}
             {post && auth.currentUser?.uid === uid && (
               <Button
                 variant="danger"

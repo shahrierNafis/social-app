@@ -2,7 +2,6 @@
 import { auth } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import GoogleButton from "../components/GoogleButton";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import AnonymousButton from "../components/AnonymousButton";
 import { updateProfile } from "firebase/auth/cordova";
@@ -15,9 +14,9 @@ function Page() {
         displayName: "Anonymous",
         photoURL:
           "https://firebasestorage.googleapis.com/v0/b/messaging-app-405702.appspot.com/o/photos%2FAnonymous%2Fphoto.webp?alt=media&token=b9b2cf99-f864-465d-a672-96cb43bd9111",
-      }).then(() => location.replace("/profile"));
+      }).then(() => location.replace("/profile/" + user.uid));
     } else {
-      redirect("/profile");
+      redirect("/profile/" + user.uid);
     }
   }
   return (

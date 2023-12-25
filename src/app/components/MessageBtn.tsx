@@ -53,14 +53,14 @@ function MessageBtn({ uid }: { uid: string }) {
   return (
     <>
       {link === "" ? (
-        <button className="py-2.5 px-5 me-2 mb-2 text-sm font-medium  rounded-lg border  bg-gray-800 text-gray-400 border-gray-600 !cursor-wait">
+        <button className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900  bg-white rounded-lg border border-gray-200 hover:bg-gray-100     dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600">
           Message
         </button>
       ) : (
         <Link href={link as Url}>
           <button
             type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
           >
             Message
           </button>

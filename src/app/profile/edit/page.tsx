@@ -54,7 +54,7 @@ function Page() {
       ...(imgBlob && { photoURL: await uploadUserPhoto(imgBlob, user.uid) }),
     });
 
-    location.replace("/profile");
+    location.replace("/profile/" + user.uid);
   }
 
   return (

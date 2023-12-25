@@ -15,9 +15,9 @@ function NavigationBar() {
   const isInARoom = usePathname().includes("/room/");
   return (
     <>
-      <Navbar className="bg-body-tertiary">
+      <Navbar className="bg-body-tertiary flex-shrink-0 overflow-x-scroll">
         <Container>
-          <Navbar.Brand>
+          <Navbar.Brand className="hidden sm:inline-block">
             <BiMessage size={32} />
           </Navbar.Brand>
 
@@ -31,7 +31,13 @@ function NavigationBar() {
               </Link>
             ) : user ? (
               <>
-                <Link className="nav-link" href="/profile">
+                <Link className="nav-link" href="/conversations">
+                  Conversations
+                </Link>
+                <Link className="nav-link" href="/users">
+                  Users
+                </Link>
+                <Link className="nav-link" href={`/profile/${user.uid}`}>
                   Profile
                 </Link>
                 <Link className="nav-link" href="/submit">
@@ -45,7 +51,7 @@ function NavigationBar() {
             )}
           </Nav>
           {/* room info */}
-          <Nav className="overflow-hidden max-h-28">
+          <Nav className="">
             {user && isInARoom && (
               <Link
                 className="nav-link ml-auto text-white font-bold"
