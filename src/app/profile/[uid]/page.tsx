@@ -46,7 +46,7 @@ function Page({ params }: { params: { uid: string } }) {
               width={50}
               height={50}
             />
-            {visitee?.displayName}
+            <span className="break-words">{visitee?.displayName}</span>
             {visitee?.uid === user?.uid ? (
               <>
                 <Link

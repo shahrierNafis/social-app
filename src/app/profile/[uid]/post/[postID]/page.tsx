@@ -45,7 +45,7 @@ function Page({
                   height={50}
                 />
               )}
-              {user?.displayName}
+              <span className="break-words">{user?.displayName}</span>
             </Link>
             {post?.data()?.timestamp && (
               <span className="text-gray-400 text-xs">
@@ -59,7 +59,7 @@ function Page({
 
             {post?.data()?.imageUrl != undefined && (
               <div
-                className="relative m-2 p-6 border shadow max-w-full max-h-screen 
+                className="relative m-2 p-6 border shadow max-w-full md:max-h-screen max-h-[50vh]
                rounded overflow-hidden h-screen
               "
               >
