@@ -14,6 +14,12 @@ service cloud.firestore {
             match /users/{UID} {
                   allow read: if request.auth != null 
 
+                  match /following/{OUID} {
+                        allow read : if request.auth.uid == OUID
+                              || request.auth.uid == UID
+                        allow write : if request.auth.uid == UID
+
+                  }
                   match /conversations/{OUID} {
                         allow read, write: if request.auth.uid == UID
                               || request.auth.uid == OUID

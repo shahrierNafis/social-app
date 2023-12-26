@@ -9,6 +9,7 @@ import { usePresenceStore } from "@/useStore";
 import Image from "next/image";
 import Link from "next/link";
 import Posts from "@/app/components/Posts";
+import FollowBtn from "@/app/components/FollowBtn";
 
 function Page({ params }: { params: { uid: string } }) {
   const [loading, setLoading] = useState(true);
@@ -40,13 +41,17 @@ function Page({ params }: { params: { uid: string } }) {
       ) : (
         <>
           <div className="text-3xl m-4">
-            <Image
-              className="rounded-full inline"
-              src={visitee?.photoURL!}
-              alt=""
-              width={50}
-              height={50}
-            />
+            {visitee?.photoURL ? (
+              <Image
+                className="rounded-full inline"
+                src={visitee?.photoURL!}
+                alt=""
+                width={50}
+                height={50}
+              />
+            ) : (
+              <div className="rounded-full inline bg-zinc-900 w-[50] h-[50]"></div>
+            )}
             <span className="break-words">{visitee?.displayName}</span>
             {visitee?.uid === user?.uid ? (
               <>
@@ -71,8 +76,8 @@ function Page({ params }: { params: { uid: string } }) {
                   <span className="text-red-500 text-xs">.Offline</span>
                 )}
                 <div className="mx-4">
-                  {" "}
                   <MessageBtn uid={params.uid} />
+                  <FollowBtn uid={params.uid} />
                 </div>
               </>
             )}
