@@ -76,8 +76,8 @@ function Page({ params }: { params: { uid: string } }) {
                   <span className="text-red-500 text-xs">.Offline</span>
                 )}
                 <div className="mx-4">
-                  {" "}
                   <MessageBtn uid={params.uid} />
+                  <FollowBtn uid={params.uid} />
                 </div>
               </>
             )}
