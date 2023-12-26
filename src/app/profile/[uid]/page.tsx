@@ -8,6 +8,7 @@ import { usePresenceStore } from "@/useStore";
 
 import Image from "next/image";
 import Link from "next/link";
+import Posts from "@/app/components/Posts";
 
 function Page({ params }: { params: { uid: string } }) {
   const [loading, setLoading] = useState(true);
@@ -76,6 +77,7 @@ function Page({ params }: { params: { uid: string } }) {
               </>
             )}
           </div>
+          <Posts uid={params.uid}></Posts>
         </>
       )}
     </>
