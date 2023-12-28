@@ -21,9 +21,8 @@ function Comments({
   const commentsRef = useRef<CollectionReference>(
     collection(firestore, postRef.path, "comments")
   );
-  const { comments, loadMore, loading, hasMore, setVisibleRange } = useComments(
-    commentsRef.current
-  );
+  const { comments, loadMore, loading, setVisibleRange, firstItemIndex } =
+    useComments(commentsRef.current);
   return (
     <>
       {commentsRef && (
@@ -39,6 +38,7 @@ function Comments({
                   <div className={`mx-auto w-full  border rounded shadow`}>
                     <Virtuoso
                       useWindowScroll
+                      firstItemIndex={firstItemIndex}
                       increaseViewportBy={window.innerHeight * 5}
                       data={comments}
                       itemContent={(index, comment) => {

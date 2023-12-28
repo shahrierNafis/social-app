@@ -8,9 +8,9 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import FlipMove from "react-flip-move";
 import Reaction, { type ReactionTS } from "./Reaction";
 import AddReaction from "./AddReaction";
+import { motion } from "framer-motion";
 
 function Reactions({
   postRef,
@@ -46,6 +46,13 @@ function Reactions({
     });
     return () => unsubscribe();
   }, [postRef]);
+
+  const transition = {
+    type: "spring",
+    stiffness: 420,
+    damping: 25,
+  };
+
   return (
     <>
       {user && reactionsRef && (
@@ -54,13 +61,22 @@ function Reactions({
             !["sm", "xs"].includes(size) && "m-2 p-2"
           } shadow inline-flex flex-wrap items-center w-100%`}
         >
-          <FlipMove>
-            {reactions.map((reaction: ReactionTS, index) => (
-              <div key={reaction.id} className={`text-${size} inline-block`}>
-                <Reaction {...{ reaction, index, setReactions, size }} />
-              </div>
-            ))}
-          </FlipMove>
+          {reactions.map((reaction: ReactionTS, index) => (
+            <motion.div
+              layout
+              transition={transition}
+              animate={{ scale: [1, 2, 1] }}
+              key={reaction.id}
+              whileHover={{
+                scale: 1.2,
+                transition: { duration: 0.1 },
+              }}
+              whileTap={{ scale: 0.9 }}
+              className={`text-${size} inline-block`}
+            >
+              <Reaction {...{ reaction, index, setReactions, size }} />
+            </motion.div>
+          ))}
           <AddReaction {...{ reactionsRef, user, size }} />
         </div>
       )}

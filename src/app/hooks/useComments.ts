@@ -34,6 +34,7 @@ export default function useComments(commentsRef: CollectionReference) {
     startIndex: 0,
     endIndex: 0,
   });
+  const [firstItemIndex, setFirstItemIndex] = useState(1000);
 
   // remove comment method
   function remove(this: Comment) {
@@ -55,6 +56,7 @@ export default function useComments(commentsRef: CollectionReference) {
           .toReversed()
           .forEach((change) => {
             if (change.type === "added") {
+              setFirstItemIndex((firstItemIndex) => firstItemIndex - 1);
               setComments((comments) => {
                 return [
                   Object.assign(change.doc, { remove }) as Comment,
@@ -98,7 +100,10 @@ export default function useComments(commentsRef: CollectionReference) {
 
   // sync comments in visible range
   useEffect(() => {
-    if (comments.length <= visibleRange.endIndex) {
+    if (
+      visibleRange.endIndex < firstItemIndex ||
+      comments.length <= visibleRange.endIndex - firstItemIndex
+    ) {
       return;
     }
 
@@ -106,16 +111,19 @@ export default function useComments(commentsRef: CollectionReference) {
       query(
         commentsRef,
         orderBy("timestamp", "desc"),
-        startAt(comments[visibleRange.startIndex].data().timestamp),
-        endAt(comments[visibleRange.endIndex].data().timestamp)
+        startAt(
+          comments[visibleRange.startIndex - firstItemIndex].data().timestamp
+        ),
+        endAt(comments[visibleRange.endIndex - firstItemIndex].data().timestamp)
       ),
       (snapshots) => {
         snapshots.docChanges().forEach((change) => {
           // update modified comments
           if (change.type === "modified") {
             setComments((comments) => {
-              comments[change.newIndex + visibleRange.startIndex] =
-                Object.assign(change.doc, { remove }) as Comment;
+              comments[
+                change.newIndex + visibleRange.startIndex - firstItemIndex
+              ] = Object.assign(change.doc, { remove }) as Comment;
               return [...comments];
             });
           }
@@ -130,7 +138,7 @@ export default function useComments(commentsRef: CollectionReference) {
     );
 
     return unsubscribe;
-  }, [comments, commentsRef, visibleRange]);
+  }, [comments, commentsRef, firstItemIndex, visibleRange]);
 
-  return { comments, loadMore, loading, hasMore, setVisibleRange };
+  return { comments, loadMore, loading, setVisibleRange, firstItemIndex };
 }
