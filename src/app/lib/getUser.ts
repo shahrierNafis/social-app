@@ -1,9 +1,12 @@
+import getUserSA from "./getUserSA";
+
 const cache: { [key: string]: User } = {};
+
 export default async function getUser(uid: string) {
   if (cache[uid]) {
     return cache[uid];
   } else {
-    cache[uid] = await (await fetch(`/profile/GET/${uid}`)).json();
+    cache[uid] = await getUserSA(uid);
     return cache[uid];
   }
 }

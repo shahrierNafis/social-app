@@ -3,51 +3,50 @@ import CardSlider from "./CardSlider";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase";
+import listAllUsers from "../lib/listAllUsers";
+import searchUsers from "../lib/searchUsers";
 function SearchUsers() {
   const [searchResult, setSearchResult] = useState<string[]>([]);
   const [quarry, setQuarry] = useState("");
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
+
   function onclick() {
+    // show all user if quarry is empty
     if (quarry.trim() === "") {
       setLoading(true);
-      fetch(`/profile/LIST`).then((res) =>
-        res
-          .json()
-          .then((result) => {
-            setSearchResult(result);
-          })
-          .then(() => {
-            setLoading(false);
-          })
-      );
+      listAllUsers()
+        .then((result) => {
+          setSearchResult(result);
+        })
+        .then(() => {
+          setLoading(false);
+        });
+
       return;
     }
+
     setLoading(true);
-    fetch(`/profile/SEARCH/${quarry}`).then((res) =>
-      res
-        .json()
-        .then((result) => {
-          setSearchResult(result);
-        })
-        .then(() => {
-          setLoading(false);
-        })
-    );
+    searchUsers(quarry)
+      .then((result) => {
+        setSearchResult(result);
+      })
+      .then(() => {
+        setLoading(false);
+      });
   }
 
+  // show all users on first render
   useEffect(() => {
     setLoading(true);
-    fetch(`/profile/LIST`).then((res) =>
-      res
-        .json()
-        .then((result) => {
-          setSearchResult(result);
-        })
-        .then(() => {
-          setLoading(false);
-        })
-    );
+    listAllUsers()
+      .then((result) => {
+        setSearchResult(result);
+      })
+      .then(() => {
+        setLoading(false);
+      });
+
     return () => {};
   }, []);
 
