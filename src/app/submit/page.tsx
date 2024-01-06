@@ -9,14 +9,16 @@ import {
   setDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Button } from "@/components/ui/button";
 import { useAuthState } from "react-firebase-hooks/auth";
 import uploadImage from "../lib/uploadImage";
 import imageCompression from "browser-image-compression";
-import { ProgressBar } from "react-bootstrap";
+import { Progress } from "@/components/ui/progress";
 import { useRouter } from "next/navigation";
 import PostData from "../types/PostData";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 function Page() {
   const [text, setText] = useState("");
@@ -72,39 +74,41 @@ function Page() {
   }, [image, imageUrl, isSending, router, text, user]);
   return (
     <>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 bg-black w-[75vw] max-w-screen-md h-fit  p-4 rounded-lg">
-        <Form
+      <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 bg-black w-[75vw] md:w-[50vw] max-w-screen-lg h-[75vh] lg:h-[64vh] 2xl:h-[45vh]  p-4 rounded-lg">
+        <form
           onSubmit={(e) => {
             e.preventDefault();
             onSubmit();
           }}
+        ></form>
+        <Label className="font-bold my-2">Create a post</Label>
+        <Textarea
+          placeholder="What's on your mind?"
+          value={text}
+          className="flex-grow"
+          onChange={(e) => setText(e.target.value)}
+          required
+        />
+        <Label className="my-2" htmlFor="picture">
+          Add an image
+        </Label>
+        <Input
+          id="picture"
+          type="file"
+          accept="image/*"
+          className="flex-grow-0"
+          onChange={(e) => setImage((e.target as HTMLInputElement).files?.[0])}
+        />
+        {isSending && <Progress className="mt-2 w-full" value={progress} />}
+        <Button
+          className="my-2 flex-grow-0 max-w-fit"
+          disabled={isSending}
+          variant={"outline"}
+          type="submit"
+          onClick={onSubmit}
         >
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label className="font-bold">Create a post</Form.Label>
-            <Form.Control
-              as="textarea"
-              placeholder="What's on your mind?"
-              rows={typeof screen !== "undefined" ? screen.height / 100 : 3}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Add an image</Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setImage((e.target as HTMLInputElement).files?.[0])
-              }
-            />
-          </Form.Group>
-          {isSending && <ProgressBar className="w-full" now={progress} />}
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+          Submit
+        </Button>
       </div>
     </>
   );
