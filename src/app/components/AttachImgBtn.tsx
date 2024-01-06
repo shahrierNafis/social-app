@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, ProgressBar } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+
 import uploadImage from "@/app/lib/uploadImage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase";
@@ -7,6 +9,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { UploadTask } from "firebase/storage";
 import { useRoomStore } from "@/useStore";
 import imageCompression from "browser-image-compression";
+import { Loader2 } from "lucide-react";
 
 function AttachImgBtn() {
   const [image, setImage] = useState<File>();
@@ -114,15 +117,16 @@ function AttachImgBtn() {
             <div>
               {isSending ? (
                 <>
-                  <ProgressBar className="w-full" now={progress} />
+                  <Progress className="w-full" value={progress} />
                   <Button
                     className="m-2"
-                    variant="danger"
+                    variant="destructive"
                     onClick={() => cancel()}
                   >
                     Cancel
                   </Button>
-                  <Button className="m-2" variant="disabled" disabled>
+                  <Button className="m-2" variant="secondary" disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Sending...
                   </Button>
                 </>
@@ -130,7 +134,7 @@ function AttachImgBtn() {
                 <>
                   <Button
                     className="m-2"
-                    variant="danger"
+                    variant="destructive"
                     onClick={() => setIsVisible(false)}
                   >
                     Close

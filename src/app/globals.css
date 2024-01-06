@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "~bootstrap/dist/css/bootstrap.min.css";
-
 @layer utilities {
   @variants responsive {
     /* Hide scrollbar for Chrome, Safari and Opera */

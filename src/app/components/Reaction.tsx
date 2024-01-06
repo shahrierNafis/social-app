@@ -46,7 +46,7 @@ function Reaction({
         }`}
       >
         <button
-          className={`!text-${size} border rounded-full px-1 hover:cursor-pointer bg-dark ring-black/50 lg:hover:ring active:ring`}
+          className={`!text-${size} border rounded-full px-1 hover:cursor-pointer bg-zinc-950 ring-black/50 lg:hover:ring active:ring`}
           onClick={() => onclick(reaction, index)}
         >
           {reaction.emoji}

@@ -19,11 +19,11 @@ function CardSlider({
   return (
     <div
       id="main-slider-container"
-      className="w-[100%] bg-gray-900 p-2 mt-10 relative flex items-center"
+      className="w-[100%] bg-zinc-900 p-2 mt-10 relative flex items-center"
     >
       <MdChevronLeft
         size={40}
-        className="absolute left-0 z-10  md:hover:opacity-100 h-[100%] active:bg-gray-700  md:hover:bg-gray-700"
+        className="absolute left-0 z-10  md:hover:opacity-100 h-[100%] active:bg-zinc-700  md:hover:bg-zinc-700"
         onClick={slideLeft}
       />
       <div className="w-full">
@@ -38,7 +38,7 @@ function CardSlider({
       </div>
       <MdChevronRight
         size={40}
-        className=" absolute right-0  md:hover:opacity-100 h-[100%] active:bg-gray-700  md:hover:bg-gray-700"
+        className=" absolute right-0  md:hover:opacity-100 h-[100%] active:bg-zinc-700  md:hover:bg-zinc-700"
         onClick={slideRight}
       />
     </div>

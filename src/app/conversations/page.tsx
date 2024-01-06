@@ -28,7 +28,7 @@ export default function Home() {
                   <div className="  flex items-center flex-row ">
                     <div className="relative h-12 w-12 mr-4">
                       <Image
-                        className="rounded-full h-full w-full bg-gray-600"
+                        className="rounded-full h-full w-full bg-zinc-600"
                         src={conversation.roomMate.photoURL || ""}
                         alt=""
                         fill

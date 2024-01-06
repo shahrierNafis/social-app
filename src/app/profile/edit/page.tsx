@@ -3,11 +3,15 @@ import AvatarCrop from "@/app/components/AvatarCrop";
 import uploadUserPhoto from "@/app/lib/uploadUserPhoto";
 import { auth } from "@/firebase";
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
+
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/navigation";
 import "react-image-crop/dist/ReactCrop.css";
 import { updateProfile } from "firebase/auth";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 function Page() {
   const [displayName, setDisplayName] = useState("");
@@ -18,8 +22,6 @@ function Page() {
   const [imgBlob, setImgBlob] = useState<Blob>();
 
   const [isUpdating, setIsUpdating] = useState(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -59,57 +61,53 @@ function Page() {
 
   return (
     <>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>displayName</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder=""
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>photo</Form.Label>
-          {imgSrc && (
-            <Button className="m-2" onClick={() => setCropOn(true)}>
-              Crop
-            </Button>
-          )}
-          <Form.Control type="file" accept="image/*" onChange={onSelectFile} />
-        </Form.Group>
+      <form className="m-2">
+        <Label>displayName</Label>
+        <Input
+          type="text"
+          placeholder=""
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+        />
+        <Label>photo</Label>
+        {imgSrc && (
+          <Button className="m-2" onClick={() => setCropOn(true)}>
+            Crop
+          </Button>
+        )}
+        <Input
+          className="my-2"
+          type="file"
+          accept="image/*"
+          onChange={onSelectFile}
+        />
 
         {isUpdating ? (
           <>
-            <button
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md cursor-not-allowed opacity-50"
-              disabled
-            >
+            <Button disabled variant={"secondary"}>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Updating...
-            </button>
+            </Button>
           </>
         ) : (
           <>
             {displayName !== user?.displayName || imgSrc ? (
-              <button
-                type="button"
-                className="focus:outline-none text-black bg-yellow-700 hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900"
-                onClick={onClick}
-              >
-                Update
-              </button>
+              <>
+                <Button type="button" onClick={onClick}>
+                  Update
+                </Button>{" "}
+                <Link href={"/profile/" + user?.uid}>
+                  <Button variant={"destructive"}>Cancel</Button>
+                </Link>
+              </>
             ) : (
-              <button
-                type="button"
-                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                onClick={() => router.push("/profile")}
-              >
-                back
-              </button>
+              <Link href={"/profile/" + user?.uid}>
+                <Button variant={"secondary"}>back</Button>
+              </Link>
             )}
           </>
         )}
-      </Form>
+      </form>
 
       {cropOn && <AvatarCrop {...{ imgSrc, setImgBlob, setCropOn }} />}
     </>

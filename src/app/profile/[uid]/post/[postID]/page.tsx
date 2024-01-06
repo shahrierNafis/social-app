@@ -6,7 +6,7 @@ import Image from "next/image";
 import Comments from "@/app/components/Comments";
 import Reactions from "@/app/components/Reactions";
 import getUser, { User } from "@/app/lib/getUser";
-import Button from "react-bootstrap/Button";
+import { Button } from "@/components/ui/button";
 import PostData from "@/app/types/PostData";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -73,7 +73,7 @@ function Page({
             {/* Reactions, comment button, remove button */}
             {post && auth.currentUser?.uid === uid && (
               <Button
-                variant="danger"
+                variant="destructive"
                 className="m-2 float-right block"
                 onClick={() => {
                   deleteDoc(post?.ref).then(() =>

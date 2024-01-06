@@ -38,7 +38,7 @@ function Message({
           {!sameAuthor && (
             <Image
               className={`rounded-full h-full w-full ${
-                ownMessage ? "bg-gray-700" : "bg-gray-600"
+                ownMessage ? "bg-zinc-700" : "bg-zinc-600"
               }`}
               src={author?.photoURL || ""}
               alt=""

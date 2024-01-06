@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Posts from "@/app/components/Posts";
 import FollowBtn from "@/app/components/FollowBtn";
+import { Button } from "@/components/ui/button";
 
 function Page({ params }: { params: { uid: string } }) {
   const [loading, setLoading] = useState(true);
@@ -61,11 +62,8 @@ function Page({ params }: { params: { uid: string } }) {
                 >
                   .edit
                 </Link>
-                <Link
-                  className="block max-w-fit mx-4 m-1 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  href="/sign-out"
-                >
-                  Sign Out
+                <Link className="block m-2" href="/sign-out">
+                  <Button variant="destructive">Sign Out</Button>
                 </Link>
               </>
             ) : (

@@ -4,7 +4,7 @@ import Comments from "./Comments";
 import Reactions from "./Reactions";
 import Image from "next/image";
 import getUser, { User } from "@/app/lib/getUser";
-import { Button } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
 import { auth } from "@/firebase";
 import Link from "next/link";
 import { memo } from "react";
@@ -29,7 +29,7 @@ const Comment = memo(function Comment({ comment }: { comment: CommentType }) {
         <div className="p-2">
           <div
             className={`p-2 border shadow rounded ${
-              isExpanded ? "bg-neutral-900" : "bg-dark"
+              isExpanded ? "bg-zinc-900" : "bg-zinc-950"
             }`}
             key={comment.id}
           >
@@ -80,7 +80,7 @@ const Comment = memo(function Comment({ comment }: { comment: CommentType }) {
               {comment.data().author === auth.currentUser?.uid && (
                 <Button
                   className="text-xs float-right mx-1"
-                  variant="danger"
+                  variant="destructive"
                   onClick={() => comment.remove()}
                 >
                   remove comment

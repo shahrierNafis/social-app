@@ -6,7 +6,7 @@ import ReactCrop, {
   makeAspectCrop,
 } from "react-image-crop";
 import { getCroppedImg } from "@/app/lib/getCroppedImg";
-import { Button } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
 
 function AvatarCrop({
   imgSrc,
