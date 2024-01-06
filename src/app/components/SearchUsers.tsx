@@ -1,10 +1,18 @@
 import User from "./User";
-import CardSlider from "./CardSlider";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase";
 import listAllUsers from "../lib/listAllUsers";
 import searchUsers from "../lib/searchUsers";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 function SearchUsers() {
   const [searchResult, setSearchResult] = useState<string[]>([]);
   const [quarry, setQuarry] = useState("");
@@ -50,67 +58,52 @@ function SearchUsers() {
     return () => {};
   }, []);
 
-  const title = (
-    <>
-      <div className="relative m-1">
-        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg
-            className="w-4 h-4 text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            />
-          </svg>
-        </div>
-        <div className="flex items-center">
-          <input
-            type="search"
-            id="default-search"
-            className="inline md:max-w-[45vw] w-full py-2 ps-10 text-sm border  rounded-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-            placeholder="..."
-            value={quarry}
-            onChange={(e) => setQuarry(e.target.value)}
-            required
-          />
-          <button
-            type="button"
-            className="text-white m-1 inline end-2.5 bottom-2.5 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
-            onClick={onclick}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-    </>
-  );
   return (
     <>
-      <CardSlider {...{ title }}>
-        {loading ? (
-          <div className="h-32 flex items-center justify-center">
-            <span className="text-gray-400">{"Loading..."}</span>
-          </div>
-        ) : searchResult?.length === 0 ? (
-          <div className="h-32 flex items-center justify-center">
-            <span className="text-gray-400">{"No Search Result"}</span>
-          </div>
-        ) : (
-          user &&
-          searchResult?.map((uid) => {
-            if (uid !== user.uid) {
-              return <User key={uid} uid={uid} href={`/profile/${uid}`} />;
-            }
-          })
-        )}
-      </CardSlider>
+      <div className="p-2 lg:p-4 mt-4 border-x md:m-2">
+        <div className="flex items-center mb-2">
+          <Input
+            type="text"
+            className="px-3 py-2 max-w-xl bg-zinc-900"
+            placeholder="Search..."
+            value={quarry}
+            onChange={(e) => setQuarry(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                onclick();
+              }
+            }}
+          />
+          <Button onClick={onclick} className="px-3 py-2">
+            Search
+          </Button>
+        </div>
+        <Carousel
+          opts={{
+            dragFree: true,
+            align: "start",
+          }}
+          className="border-y flex max-w-[100vw] justify-center items-center shadow rounded"
+        >
+          <CarouselPrevious className="left-0 shrink-0 z-50" />
+          <CarouselContent className="">
+            {loading ? (
+              <div className="w-full h-32 flex items-center justify-center">
+                Loading...
+              </div>
+            ) : (
+              searchResult.map((uid) => (
+                <CarouselItem key={uid} className="basis-[16rem]">
+                  <div className="p-1">
+                    <User uid={uid} href={`/profile/${uid}`} />
+                  </div>
+                </CarouselItem>
+              ))
+            )}
+          </CarouselContent>
+          <CarouselNext className="z-50 right-0 shrink-0" />
+        </Carousel>
+      </div>
     </>
   );
 }
