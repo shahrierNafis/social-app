@@ -19,7 +19,7 @@ function NavigationBar() {
   const isInSubmit = usePathname() == "/submit";
   return (
     <>
-      <div className="flex p-2 items-center space-x-2 bg-zinc-900 flex-shrink-0 overflow-x-scroll no-scrollbar">
+      <div className="flex items-center flex-shrink-0 p-2 space-x-2 overflow-x-scroll bg-zinc-900 no-scrollbar">
         <BiMessage className="hidden sm:inline-block" size={32} />
 
         <div className="me-auto">
@@ -80,11 +80,11 @@ function NavigationBar() {
         {/* room info */}
         <div className="">
           {user && isInARoom && (
-            <Link className="ml-auto text-white font-bold" href={roomNameLink}>
-              <div className="  flex items-center flex-row">
-                <div className="flex relative items-center justify-center h-8 w-8 rounded-full  flex-shrink-0">
+            <Link className="ml-auto font-bold text-white" href={roomNameLink}>
+              <div className="flex flex-row items-center ">
+                <div className="relative flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full">
                   <Image
-                    className="rounded-full h-full w-full bg-zinc-600"
+                    className="w-full h-full rounded-full bg-zinc-600"
                     src={roomImage || ""}
                     alt=""
                     fill
@@ -98,7 +98,7 @@ function NavigationBar() {
       </div>
       {loading && (
         <>
-          <div className="flex items-center justify-center vh-100 vw-100 fixed top-0 left-0 z-50 bg-zinc-600 bg-opacity-95 text-white font-bold">
+          <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen font-bold text-white bg-zinc-900 bg-opacity-95">
             Loading...
           </div>
         </>
