@@ -58,7 +58,7 @@ function AvatarCrop({
 
   return (
     <>
-      <div className="absolute top-0 left-0 vh-100 vw-100 flex flex-col items-center justify-center">
+      <div className="fixed top-0 left-0 flex flex-col items-center justify-center w-screen h-screen">
         {!!imgSrc && (
           <>
             <ReactCrop

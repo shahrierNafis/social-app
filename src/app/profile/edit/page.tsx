@@ -71,12 +71,12 @@ function Page() {
         />
         <Label>photo</Label>
         {imgSrc && (
-          <Button className="m-2" onClick={() => setCropOn(true)}>
+          <Button type="button" className="m-2" onClick={() => setCropOn(true)}>
             Crop
           </Button>
         )}
         <Input
-          className="my-2"
+          className="my-2 text-white"
           type="file"
           accept="image/*"
           onChange={onSelectFile}
@@ -85,7 +85,7 @@ function Page() {
         {isUpdating ? (
           <>
             <Button disabled variant={"secondary"}>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Updating...
             </Button>
           </>
