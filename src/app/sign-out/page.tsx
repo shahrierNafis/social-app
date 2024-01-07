@@ -25,10 +25,14 @@ function Page() {
   }
   return (
     <>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 bg-black w-64 p-4 rounded-lg 32">
+      <div className="absolute w-64 p-4 -translate-x-1/2 -translate-y-1/2 bg-black border-2 rounded-lg top-1/2 left-1/2 32">
         <div className="text-2xl ">Are you sure you want to sign out?</div>
         <div className="flex justify-between w-[100%]">
-          <Button className="bg-zinc-900" onClick={() => router.back()}>
+          <Button
+            variant={"outline"}
+            className="bg-zinc-900"
+            onClick={() => router.back()}
+          >
             Cancel
           </Button>
           <Button variant={"destructive"} onClick={signOut}>

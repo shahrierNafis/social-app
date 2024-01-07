@@ -41,10 +41,10 @@ function Page({ params }: { params: { uid: string } }) {
         "loading"
       ) : (
         <>
-          <div className="text-3xl m-4">
+          <div className="m-4 text-3xl">
             {visitee?.photoURL ? (
               <Image
-                className="rounded-full inline"
+                className="inline rounded-full"
                 src={visitee?.photoURL!}
                 alt=""
                 width={50}
@@ -57,21 +57,21 @@ function Page({ params }: { params: { uid: string } }) {
             {visitee?.uid === user?.uid ? (
               <>
                 <Link
-                  className="text-yellow-700 hover:text-yellow-600 text-xs"
+                  className="text-xs text-yellow-700 hover:text-yellow-600"
                   href="/profile/edit"
                 >
                   .edit
                 </Link>
-                <Link className="block m-2" href="/sign-out">
+                <Link className="block m-2 max-w-fit" href="/sign-out">
                   <Button variant="destructive">Sign Out</Button>
                 </Link>
               </>
             ) : (
               <>
                 {onlineUsers?.includes(params.uid) ? (
-                  <span className="text-green-500 text-xs">.Online</span>
+                  <span className="text-xs text-green-500">.Online</span>
                 ) : (
-                  <span className="text-red-500 text-xs">.Offline</span>
+                  <span className="text-xs text-red-500">.Offline</span>
                 )}
                 <div className="mx-4">
                   <MessageBtn uid={params.uid} />
